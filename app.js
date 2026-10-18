@@ -40,6 +40,36 @@ function toAngkaJawa(numberStr) {
   return `꧇${res}꧇`;
 }
 
+// FUNGSI KHUSUS: Mengatur kapitalisasi teks input
+function formatInputTransliterasi(teks) {
+  if (!teks) return "";
+  
+  // Daftar bulan yang diawali huruf Vokal (Aksara Swara: A, I, U, E, O)
+  const bulanVokal = ["april", "agustus", "oktober"];
+
+  return String(teks).replace(/(«[^»]+»|<<[^>]+>>|\b[A-Z]{2,}(?::[1-4])?\b)|([a-zA-ZÀ-ÿéèêÉÈÊ]+)/g, function(match, singkatan, kata) {
+    // 1. Sintaks khusus atau Singkatan otomatis (minimal 2 huruf kapital)
+    if (singkatan) return singkatan;
+
+    if (kata) {
+      // Pengecualian Singkatan murni (2+ huruf kapital seperti KTP, DIY, PNS)
+      if (/^[A-Z]{2,}$/.test(kata)) {
+        return kata;
+      }
+
+      // 2. Pengecualian Khusus Bulan Berawalan Vokal (Aksara Swara)
+      const kataLower = kata.toLowerCase();
+      if (bulanVokal.includes(kataLower)) {
+        return kataLower.charAt(0).toUpperCase() + kataLower.slice(1);
+      }
+
+      // 3. Teks biasa dan Bulan berawalan konsonan -> Huruf kecil semua
+      return kataLower;
+    }
+    return match;
+  });
+}
+
 function formatTanggalAksara(dateString, transliterateFn) {
   if (!dateString) return "";
   const d = new Date(dateString);
@@ -48,7 +78,15 @@ function formatTanggalAksara(dateString, transliterateFn) {
   const yearNum = d.getFullYear();
 
   const dayAksara = toAngkaJawa(dayNum);
-  const monthAksara = transliterateFn(monthName);
+  
+  // Format bulan: Vokal (A, I, U, E, O) = Huruf awal Kapital (Aksara Swara), Konsonan = Kecil semua
+  const firstChar = monthName.charAt(0);
+  const isVowelStart = /^[AIEOUaieou]/.test(firstChar);
+  const formattedMonth = isVowelStart 
+    ? firstChar.toUpperCase() + monthName.slice(1).toLowerCase() 
+    : monthName.toLowerCase();
+
+  const monthAksara = transliterateFn(formattedMonth);
   const yearAksara = toAngkaJawa(yearNum);
 
   return `${dayAksara} ${monthAksara} ${yearAksara}`;
@@ -77,25 +115,6 @@ function getRandomText(array) {
   if (!array || array.length === 0) return "";
   const idx = Math.floor(Math.random() * array.length);
   return array[idx];
-}
-
-// Fungsi pembantu untuk mengubah teks biasa ke lowercase, 
-// tetapi mempertahankan singkatan (minimal 2 huruf kapital, format bertitik, atau sintaks «...»)
-function normalisasiInputTeks(text) {
-  if (!text) return "";
-  const singkatanRegex = /(«[^»]+»|<<[^>]+>>|\b[A-Z]{2,}(?::[1-4])?\b|\b(?:[A-Z]\.)+)/g;
-  
-  let result = "";
-  let lastIndex = 0;
-  let match;
-
-  while ((match = singkatanRegex.exec(text)) !== null) {
-    result += text.slice(lastIndex, match.index).toLowerCase();
-    result += match[0]; // Pertahankan huruf kapital singkatan
-    lastIndex = singkatanRegex.lastIndex;
-  }
-  result += text.slice(lastIndex).toLowerCase();
-  return result;
 }
 
 document.getElementById('docForm').addEventListener('submit', async function(e) {
@@ -137,11 +156,10 @@ document.getElementById('docForm').addEventListener('submit', async function(e) 
     return;
   }
 
-  // WRAPPER PENYESUAIAN: Mengubah kata biasa menjadi lowercase, 
-  // namun mempertahankan kapitalisasi pada singkatan (minimal 2 huruf besar)
+  // WRAPPER KHUSUS: Memproses teks melalui formatInputTransliterasi
   const t = function(text) {
     if (!text) return "";
-    return rawTranslitterateFn(normalisasiInputTeks(String(text)));
+    return rawTranslitterateFn(formatInputTransliterasi(text));
   };
 
   const pdfContainer = document.getElementById('pdfContainer');
@@ -230,5 +248,5 @@ function resetForm() {
   updateEngineOptions();
   document.getElementById('formSection').style.display = 'block';
   document.getElementById('previewSection').style.display = 'none';
-                                          }
-      
+                                                    }
+    
