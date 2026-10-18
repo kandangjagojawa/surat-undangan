@@ -426,7 +426,7 @@ body {
   }
 }
 
-/* Media Print (Standard Cetak Browser / Solusi 1) */
+/* Media Print (Pengaturan Margin Cetak Multi-Halaman) */
 @media print {
   body {
     background: #FFFFFF !important;
@@ -453,13 +453,14 @@ body {
 
   .a4-page {
     width: 100% !important;
-    min-height: 100vh !important;
-    padding: 25mm 20mm 15mm 20mm !important;
+    min-height: auto !important;
+    padding: 0 !important;
     box-shadow: none !important;
   }
 
   @page {
     size: A4 portrait;
-    margin: 0;
+    margin: 25mm 20mm 20mm 20mm;
   }
-}
+   }
+     
