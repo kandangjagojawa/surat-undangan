@@ -48,8 +48,7 @@ function formatTanggalAksara(dateString, transliterateFn) {
   const yearNum = d.getFullYear();
 
   const dayAksara = toAngkaJawa(dayNum);
-  // Nama bulan dipastikan huruf kecil semua sebelum dikirim ke mesin transliterasi
-  const monthAksara = transliterateFn(monthName.toLowerCase());
+  const monthAksara = transliterateFn(monthName);
   const yearAksara = toAngkaJawa(yearNum);
 
   return `${dayAksara} ${monthAksara} ${yearAksara}`;
@@ -78,6 +77,25 @@ function getRandomText(array) {
   if (!array || array.length === 0) return "";
   const idx = Math.floor(Math.random() * array.length);
   return array[idx];
+}
+
+// Fungsi pembantu untuk mengubah teks biasa ke lowercase, 
+// tetapi mempertahankan singkatan (minimal 2 huruf kapital, format bertitik, atau sintaks «...»)
+function normalisasiInputTeks(text) {
+  if (!text) return "";
+  const singkatanRegex = /(«[^»]+»|<<[^>]+>>|\b[A-Z]{2,}(?::[1-4])?\b|\b(?:[A-Z]\.)+)/g;
+  
+  let result = "";
+  let lastIndex = 0;
+  let match;
+
+  while ((match = singkatanRegex.exec(text)) !== null) {
+    result += text.slice(lastIndex, match.index).toLowerCase();
+    result += match[0]; // Pertahankan huruf kapital singkatan
+    lastIndex = singkatanRegex.lastIndex;
+  }
+  result += text.slice(lastIndex).toLowerCase();
+  return result;
 }
 
 document.getElementById('docForm').addEventListener('submit', async function(e) {
@@ -119,10 +137,11 @@ document.getElementById('docForm').addEventListener('submit', async function(e) 
     return;
   }
 
-  // WRAPPER KHUSUS: Mengubah semua teks input menjadi HURUF KECIL SEMUA
+  // WRAPPER PENYESUAIAN: Mengubah kata biasa menjadi lowercase, 
+  // namun mempertahankan kapitalisasi pada singkatan (minimal 2 huruf besar)
   const t = function(text) {
     if (!text) return "";
-    return rawTranslitterateFn(String(text).toLowerCase());
+    return rawTranslitterateFn(normalisasiInputTeks(String(text)));
   };
 
   const pdfContainer = document.getElementById('pdfContainer');
@@ -211,4 +230,5 @@ function resetForm() {
   updateEngineOptions();
   document.getElementById('formSection').style.display = 'block';
   document.getElementById('previewSection').style.display = 'none';
-}
+                                          }
+      
