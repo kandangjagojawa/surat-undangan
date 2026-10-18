@@ -1,0 +1,186 @@
+/* Pengaturan Font Aksara Jawa */
+@font-face {
+  font-family: 'Ngayogyann';
+  src: url('ngayogyann.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Ngayogyan';
+  src: url('ngayogyan.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f4f7f6;
+  color: #333;
+  padding: 20px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+header h1 {
+  color: #2c3e50;
+  font-size: 1.8rem;
+}
+
+.card {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.form-row .half {
+  flex: 1;
+}
+
+button, .btn {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btn.primary { background-color: #2980b9; color: #fff; }
+.btn.secondary { background-color: #7f8c8d; color: #fff; }
+.btn.success { background-color: #27ae60; color: #fff; }
+.btn.danger { background-color: #c0392b; color: #fff; }
+
+.btn:hover { opacity: 0.9; }
+
+.action-buttons, .post-download-menu {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.success-msg {
+  color: #27ae60;
+  font-weight: bold;
+  font-size: 1.1rem;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* FORMAT KERTAS DOKUMEN A4 & UKURAN FONT 14PT */
+.a4-page {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 25mm 20mm 20mm 20mm;
+  margin: 0 auto;
+  background: white;
+  border: 1px solid #dddddd;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  font-size: 14pt; /* Ukuran font sesuai permintaan */
+  line-height: 1.8;
+  word-wrap: break-word;
+}
+
+/* Penerapan Font Aksara Jawa */
+.font-ngayogyann * {
+  font-family: 'Ngayogyann', sans-serif !important;
+}
+
+.font-ngayogyan * {
+  font-family: 'Ngayogyan', sans-serif !important;
+}
+
+.pdf-header {
+  text-align: right;
+  margin-bottom: 25px;
+}
+
+.pdf-recipient {
+  margin-bottom: 25px;
+}
+
+.pdf-recipient .indented {
+  padding-left: 20px;
+}
+
+.paragraph-text {
+  text-align: justify;
+  margin-bottom: 15px;
+  text-indent: 30px;
+}
+
+.event-details {
+  margin: 20px 0 20px 30px;
+}
+
+.event-details table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.event-details td {
+  padding: 4px 8px;
+  vertical-align: top;
+}
+
+.event-details td.label-col {
+  width: 30%;
+  white-space: nowrap;
+}
+
+.pdf-footer {
+  margin-top: 40px;
+  float: right;
+  text-align: center;
+  min-width: 200px;
+}
+
+.bold-text {
+  font-weight: bold;
+}
