@@ -1,3 +1,7 @@
+/* ==========================================================================
+   DESAIN EKSKLUSIF: ROYAL HERITAGE MODERN (LIGHT PREMIUM)
+   ========================================================================== */
+
 @font-face {
   font-family: 'Ngayogyann';
   src: url('ngayogyann.ttf') format('truetype');
@@ -12,115 +16,288 @@
   font-style: normal;
 }
 
+:root {
+  --bg-main: #F8F9FC;
+  --card-bg: #FFFFFF;
+  --text-main: #1E293B;
+  --text-muted: #64748B;
+  
+  /* Akses Warna Premium */
+  --gold-primary: #B38728;
+  --gold-hover: #966E1E;
+  --gold-light: #FBF7EE;
+  --navy-dark: #0F172A;
+  --border-color: #E2E8F0;
+  
+  /* Elevasi Bayangan */
+  --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.03);
+  --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
+  --shadow-lg: 0 20px 30px -10px rgba(179, 135, 40, 0.1);
+  
+  --radius-lg: 16px;
+  --radius-md: 10px;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-  background-color: #f4f7f6;
-  color: #333;
-  padding: 20px;
+  background-color: var(--bg-main);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(179, 135, 40, 0.04) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(30, 41, 59, 0.03) 0px, transparent 50%);
+  color: var(--text-main);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  padding: 40px 20px;
+  min-height: 100vh;
 }
 
-.container {
-  max-width: 900px;
+.app-wrapper {
+  max-width: 860px;
   margin: 0 auto;
 }
 
-header {
+/* Header UI */
+.app-header {
   text-align: center;
+  margin-bottom: 35px;
+}
+
+.header-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  background: var(--gold-light);
+  border: 1px solid rgba(179, 135, 40, 0.2);
+  color: var(--gold-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 50px;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+.app-header h1 {
+  font-family: 'Playfair Display', serif;
+  color: var(--navy-dark);
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.app-header p {
+  color: var(--text-muted);
+  font-size: 0.98rem;
+}
+
+/* Kartu Panel Modern */
+.card-panel {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 35px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  margin-bottom: 30px;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
   margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
 }
 
-header h1 {
-  color: #2c3e50;
-  font-size: 1.8rem;
+.step-indicator {
+  width: 32px;
+  height: 32px;
+  background: var(--navy-dark);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
 }
 
-.card {
-  background: #ffffff;
-  padding: 25px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  margin-bottom: 20px;
+.panel-header h2 {
+  font-size: 1.25rem;
+  color: var(--navy-dark);
+  font-weight: 700;
+}
+
+/* Form Elements & Layout */
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 640px) {
+  .form-grid-2 { grid-template-columns: 1fr; }
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
   display: block;
+  font-size: 0.88rem;
   font-weight: 600;
-  margin-bottom: 5px;
+  color: var(--navy-dark);
+  margin-bottom: 8px;
 }
 
 .form-group input, 
 .form-group select, 
 .form-group textarea {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #cccccc;
-  border-radius: 5px;
-  font-size: 1rem;
+  padding: 12px 16px;
+  background-color: #F8FAFC;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  color: var(--text-main);
+  font-family: inherit;
+  transition: all 0.25s ease;
 }
 
-.form-row {
+.form-group input:focus, 
+.form-group select:focus, 
+.form-group textarea:focus {
+  outline: none;
+  background-color: #FFFFFF;
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 0 4px rgba(179, 135, 40, 0.1);
+}
+
+.sub-panel {
+  background: #FAF9F5;
+  border-left: 3px solid var(--gold-primary);
+  padding: 20px;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  margin: 20px 0;
+}
+
+.sub-panel-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 15px;
+}
+
+.divider {
   display: flex;
-  gap: 15px;
-}
-
-.form-row .half {
-  flex: 1;
-}
-
-button, .btn {
-  display: inline-block;
-  padding: 10px 20px;
-  font-size: 1rem;
+  align-items: center;
+  text-align: center;
+  margin: 25px 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
   font-weight: 600;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  text-decoration: none;
-  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.btn.primary { background-color: #2980b9; color: #fff; }
-.btn.secondary { background-color: #7f8c8d; color: #fff; }
-.btn.success { background-color: #27ae60; color: #fff; }
-.btn.danger { background-color: #c0392b; color: #fff; }
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-color);
+}
 
-.btn:hover { opacity: 0.9; }
+.divider span {
+  padding: 0 15px;
+}
 
-.action-buttons, .post-download-menu {
-  display: flex;
-  gap: 15px;
-  margin-top: 20px;
+/* Tombol Aksi */
+.form-actions {
+  margin-top: 30px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-}
-
-.success-msg {
-  color: #27ae60;
-  font-weight: bold;
-  font-size: 1.1rem;
+  gap: 10px;
   width: 100%;
-  text-align: center;
-  margin-bottom: 10px;
+  padding: 14px 24px;
+  font-size: 0.98rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
 }
 
-/* KERTAS DOKUMEN A4 & ATURAN SHAPING AKSARA JAWA */
+.btn-primary {
+  background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+  color: #FFFFFF;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #B38728 0%, #966E1E 100%);
+  color: #FFFFFF;
+}
+
+.btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-secondary {
+  background: #F1F5F9;
+  color: var(--navy-dark);
+}
+
+.btn-secondary:hover {
+  background: #E2E8F0;
+}
+
+.btn-outline-danger {
+  background: transparent;
+  border: 1.5px solid #EF4444;
+  color: #EF4444;
+}
+
+.btn-outline-danger:hover {
+  background: #FEF2F2;
+}
+
+.action-buttons {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+/* Frame Kertas A4 Preview */
+.paper-frame {
+  background: #E2E8F0;
+  padding: 30px;
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+
 .a4-page {
   width: 210mm;
   min-height: 297mm;
-  padding: 20mm 20mm 20mm 20mm;
+  padding: 25mm 20mm 20mm 20mm;
   margin: 0 auto;
-  background: white;
-  border: 1px solid #dddddd;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  background: #FFFFFF;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   font-size: 14pt;
   line-height: 2.4;
   word-wrap: break-word;
@@ -139,25 +316,25 @@ button, .btn {
 
 .pdf-header {
   text-align: right;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .pdf-recipient {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .pdf-recipient .indented {
-  padding-left: 20px;
+  padding-left: 25px;
 }
 
 .paragraph-text {
   text-align: justify;
-  margin-bottom: 15px;
-  text-indent: 30px;
+  margin-bottom: 20px;
+  text-indent: 35px;
 }
 
 .event-details {
-  margin: 15px 0 15px 30px;
+  margin: 20px 0 20px 35px;
 }
 
 .event-details table {
@@ -166,63 +343,119 @@ button, .btn {
 }
 
 .event-details td {
-  padding: 2px 8px;
+  padding: 3px 8px;
   vertical-align: top;
 }
 
 .event-details td.label-col {
-  width: 30%;
+  width: 32%;
   white-space: nowrap;
 }
 
 .pdf-footer {
-  margin-top: 30px;
+  margin-top: 40px;
   float: right;
   text-align: center;
-  min-width: 200px;
+  min-width: 220px;
+}
+
+.signature-space {
+  height: 70px;
 }
 
 .bold-text {
   font-weight: bold;
 }
 
-/* CSS KHUSUS MEDIA PRINT (SOLUSI 1) */
+/* Post Download Card */
+.post-download-card {
+  text-align: center;
+  padding: 25px;
+  background: var(--gold-light);
+  border: 1px solid rgba(179, 135, 40, 0.2);
+  border-radius: var(--radius-md);
+  margin-top: 25px;
+}
+
+.success-icon {
+  width: 45px;
+  height: 45px;
+  background: var(--gold-primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin: 0 auto 15px auto;
+}
+
+.post-download-card h3 {
+  color: var(--navy-dark);
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+.post-download-card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+.post-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Animasi */
+.fade-in {
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Media Print (Standard Cetak Browser / Solusi 1) */
 @media print {
   body {
-    background: #ffffff !important;
+    background: #FFFFFF !important;
     padding: 0 !important;
     margin: 0 !important;
   }
 
-  header, 
+  .app-header, 
   #formSection, 
   .action-buttons, 
-  .post-download-menu, 
-  #previewSection > h2 {
+  #postDownloadMenu, 
+  .panel-header {
     display: none !important;
   }
 
-  .container {
+  .app-wrapper, #previewSection, .paper-frame {
     max-width: 100% !important;
+    padding: 0 !important;
     margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  #previewSection {
-    background: none !important;
-    padding: 0 !important;
+    background: transparent !important;
     box-shadow: none !important;
-    margin: 0 !important;
+    border: none !important;
   }
 
   .a4-page {
     width: 100% !important;
     min-height: 100vh !important;
-    margin: 0 !important;
     padding: 15mm 20mm !important;
-    border: none !important;
     box-shadow: none !important;
-    page-break-after: avoid;
   }
 
   @page {
