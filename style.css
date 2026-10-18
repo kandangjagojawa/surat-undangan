@@ -44,7 +44,7 @@ header h1 {
   background: #ffffff;
   padding: 25px;
   border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   margin-bottom: 20px;
 }
 
@@ -112,7 +112,7 @@ button, .btn {
   margin-bottom: 10px;
 }
 
-/* FORMAT KERTAS DOKUMEN A4 DENGAN PENGATURAN AKSARA JAWA SPESIFIK */
+/* KERTAS DOKUMEN A4 & ATURAN SHAPING AKSARA JAWA */
 .a4-page {
   width: 210mm;
   min-height: 297mm;
@@ -120,18 +120,15 @@ button, .btn {
   margin: 0 auto;
   background: white;
   border: 1px solid #dddddd;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   font-size: 14pt;
-  line-height: 2.5; /* Mencegah Pasangan Bertumpuk */
+  line-height: 2.4;
   word-wrap: break-word;
-  
-  /* Aktifkan rendering ligatur OpenType Aksara Jawa */
   font-feature-settings: "liga" 1, "calt" 1;
   -webkit-font-feature-settings: "liga" 1, "calt" 1;
   text-rendering: optimizeLegibility;
 }
 
-/* Penerapan Kelas Font Aksara Jawa */
 .font-ngayogyann, .font-ngayogyann * {
   font-family: 'Ngayogyann', serif !important;
 }
@@ -187,4 +184,49 @@ button, .btn {
 
 .bold-text {
   font-weight: bold;
+}
+
+/* CSS KHUSUS MEDIA PRINT (SOLUSI 1) */
+@media print {
+  body {
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  header, 
+  #formSection, 
+  .action-buttons, 
+  .post-download-menu, 
+  #previewSection > h2 {
+    display: none !important;
+  }
+
+  .container {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  #previewSection {
+    background: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+  }
+
+  .a4-page {
+    width: 100% !important;
+    min-height: 100vh !important;
+    margin: 0 !important;
+    padding: 15mm 20mm !important;
+    border: none !important;
+    box-shadow: none !important;
+    page-break-after: avoid;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
 }
