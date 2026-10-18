@@ -1,19 +1,15 @@
-// Variabel Global Data & Template
 let templateData = null;
 
-// Peta Angka Latin ke Angka Aksara Jawa
 const ANGKA_JAWA = {
   '0': '꧐', '1': '꧑', '2': '꧒', '3': '꧓', '4': '꧔',
   '5': '꧕', '6': '꧖', '7': '꧗', '8': '꧘', '9': '꧙'
 };
 
-// Nama Bulan Bahasa Indonesia & Jawa
 const BULAN_INDO = [
   "Januari", "Februari", "Maret", "April", "Mei", "Juni",
   "Juli", "Agustus", "September", "Oktober", "November", "Desember"
 ];
 
-// Inisialisasi: Muat Berkas undangan.json
 document.addEventListener("DOMContentLoaded", () => {
   fetch('undangan.json')
     .then(res => res.json())
@@ -24,34 +20,17 @@ document.addEventListener("DOMContentLoaded", () => {
   updateEngineOptions();
 });
 
-// Toggle Tampilan Form Sesuai Jenis Dokumen (Undangan vs Surat)
 function toggleDocTypeFields() {
   const docType = document.getElementById('docType').value;
-  const undanganFields = document.getElementById('undanganFields');
-  const suratFields = document.getElementById('suratFields');
-
-  if (docType === 'undangan') {
-    undanganFields.style.display = 'block';
-    suratFields.style.display = 'none';
-  } else {
-    undanganFields.style.display = 'none';
-    suratFields.style.display = 'block';
-  }
+  document.getElementById('undanganFields').style.display = (docType === 'undangan') ? 'block' : 'none';
+  document.getElementById('suratFields').style.display = (docType === 'surat') ? 'block' : 'none';
 }
 
-// Update Opsi Engine Transliterasi berdasarkan Pilihan Bahasa
 function updateEngineOptions() {
   const docLang = document.getElementById('docLang').value;
-  const engineGroup = document.getElementById('engineGroup');
-
-  if (docLang === 'indonesia') {
-    engineGroup.style.display = 'none';
-  } else {
-    engineGroup.style.display = 'block';
-  }
+  document.getElementById('engineGroup').style.display = (docLang === 'jawa') ? 'block' : 'none';
 }
 
-// Konversi Angka Latin ke Angka Aksara Jawa (berisi Pada Pangkat ꧇)
 function toAngkaJawa(numberStr) {
   let str = String(numberStr);
   let res = "";
@@ -61,7 +40,6 @@ function toAngkaJawa(numberStr) {
   return `꧇${res}꧇`;
 }
 
-// Transliterasi Tanggal ke Aksara Jawa (Tanggal: Angka, Bulan: Teks Aksara Jawa, Tahun: Angka)
 function formatTanggalAksara(dateString, transliterateFn) {
   if (!dateString) return "";
   const d = new Date(dateString);
@@ -76,50 +54,79 @@ function formatTanggalAksara(dateString, transliterateFn) {
   return `${dayAksara} ${monthAksara} ${yearAksara}`;
 }
 
-// Mengambil Fungsi Transliterasi & Font Sesuai Skenario
-function getTransliterationConfig() {
-  const docLang = document.getElementById('docLang').value;
-  let transliterateFn = window.transliterasiKalimat; // Default
-  let fontClass = "font-ngayogyann";
-
-  if (docLang === 'indonesia') {
-    // Skenario 3a: Bahasa Indonesia -> jawaindo.js, Font: ngayogyann.ttf
-    transliterateFn = window.transliterasiKalimat; 
-    fontClass = "font-ngayogyann";
-  } else {
-    // Skenario 3b: Bahasa Jawa
-    const engine = document.getElementById('docEngine').value;
-    if (['kbj.js', 'sriwedari.js', 'simplified.js'].includes(engine)) {
-      transliterateFn = window.transliterasiKalimat;
-      fontClass = "font-ngayogyann";
-    } else if (engine === 'tradisional.js' || engine === 'carakawi.js') {
-      transliterateFn = window.transliterateKawi || window.transliterasiKalimat;
-      fontClass = "font-ngayogyan";
+// FUNGSI MEMUAT SCRIPT ENGINE SECARA DINAMIS (MENGHINDARI NATIVE OVERWRITE)
+function loadScriptEngine(scriptFile) {
+  return new Promise((resolve, reject) => {
+    // Hapus script engine sebelumnya dari DOM
+    const existingScript = document.getElementById('activeEngineScript');
+    if (existingScript) {
+      existingScript.remove();
     }
-  }
 
-  return { transliterateFn, fontClass };
+    // Bersihkan fungsi global sebelum memuat yang baru
+    delete window.transliterasiKalimat;
+    delete window.transliterateKawi;
+
+    const script = document.createElement('script');
+    script.id = 'activeEngineScript';
+    script.src = scriptFile + '?v=' + new Date().getTime();
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error(`Gagal memuat script engine: ${scriptFile}`));
+    document.head.appendChild(script);
+  });
 }
 
-// Fungsi Random Pick Pengantar & Penutup
 function getRandomText(array) {
   if (!array || array.length === 0) return "";
   const idx = Math.floor(Math.random() * array.length);
   return array[idx];
 }
 
-// Processing Submit Formulir
-document.getElementById('docForm').addEventListener('submit', function(e) {
+// PROSES FORM SUBMIT
+document.getElementById('docForm').addEventListener('submit', async function(e) {
   e.preventDefault();
 
   const docType = document.getElementById('docType').value;
   const docLang = document.getElementById('docLang').value;
-  const config = getTransliterationConfig();
-  const t = config.transliterateFn;
 
-  // Set CSS Font Class ke Kontainer PDF
+  let scriptFile = 'jawaindo.js';
+  let fontClass = 'font-ngayogyann';
+
+  if (docLang === 'indonesia') {
+    scriptFile = 'jawaindo.js';
+    fontClass = 'font-ngayogyann';
+  } else {
+    const selectedEngine = document.getElementById('docEngine').value;
+    scriptFile = selectedEngine;
+    if (selectedEngine === 'tradisional.js' || selectedEngine === 'carakawi.js') {
+      fontClass = 'font-ngayogyan';
+    } else {
+      fontClass = 'font-ngayogyann';
+    }
+  }
+
+  // Muat script engine yang dipilih
+  try {
+    await loadScriptEngine(scriptFile);
+  } catch (err) {
+    alert("Terjadi kesalahan saat memuat mesin transliterasi.");
+    return;
+  }
+
+  // Tentukan fungsi transliterasi berdasarkan paugeran yang baru dimuat
+  let t = window.transliterasiKalimat;
+  if (scriptFile === 'tradisional.js' || scriptFile === 'carakawi.js') {
+    t = window.transliterateKawi || window.transliterasiKalimat;
+  }
+
+  if (typeof t !== 'function') {
+    alert("Fungsi transliterasi tidak ditemukan pada paugeran terpilih.");
+    return;
+  }
+
+  // Set kelas font pada container preview
   const pdfContainer = document.getElementById('pdfContainer');
-  pdfContainer.className = `a4-page ${config.fontClass}`;
+  pdfContainer.className = `a4-page ${fontClass}`;
 
   // 1. Kota & Tanggal Surat
   const kota = document.getElementById('inputKota').value;
@@ -128,18 +135,17 @@ document.getElementById('docForm').addEventListener('submit', function(e) {
   const tglSuratAksara = formatTanggalAksara(tglSurat, t);
   document.getElementById('previewKotaTanggal').innerText = `${kotaAksara}, ${tglSuratAksara}`;
 
-  // 2. Tujuan / Penerima
+  // 2. Tujuan
   const penerima = document.getElementById('inputPenerima').value;
   let labelTujuan = (docLang === 'indonesia') ? "Kepada: Bapak/Ibu/Saudara" : "Kagem: Bapak/Ibu/Sadhérék";
   document.getElementById('previewTujuanLabel').innerText = t(labelTujuan);
   document.getElementById('previewPenerimaNama').innerText = t(penerima);
 
-  // 3. Isi Dokumen (Undangan vs Surat)
+  // 3. Isi Dokumen
   if (docType === 'undangan') {
     document.getElementById('previewDetailAcara').style.display = 'block';
     document.getElementById('previewIsiSuratText').style.display = 'none';
 
-    // Pengantar & Penutup Otomatis
     if (templateData && templateData[docLang]) {
       const pengantarRaw = getRandomText(templateData[docLang].pengantar);
       const penutupRaw = getRandomText(templateData[docLang].penutup);
@@ -147,7 +153,6 @@ document.getElementById('docForm').addEventListener('submit', function(e) {
       document.getElementById('previewPenutup').innerText = t(penutupRaw);
     }
 
-    // Detail Acara
     const tglAcara = document.getElementById('inputTanggalAcara').value;
     const jamAcara = document.getElementById('inputJamAcara').value;
     const tempatAcara = document.getElementById('inputTempatAcara').value;
@@ -164,7 +169,6 @@ document.getElementById('docForm').addEventListener('submit', function(e) {
     document.getElementById('previewNamaAcara').innerText = t(namaAcara);
 
   } else {
-    // Surat (Tanpa pengantar/penutup otomatis)
     document.getElementById('previewDetailAcara').style.display = 'none';
     document.getElementById('previewIsiSuratText').style.display = 'block';
     document.getElementById('previewPengantar').innerText = "";
@@ -180,24 +184,22 @@ document.getElementById('docForm').addEventListener('submit', function(e) {
   document.getElementById('previewPengirimLabel').innerText = t(labelPengirim);
   document.getElementById('previewPengirimNama').innerText = t(pengirim);
 
-  // Pindah Tampilan ke Preview Section
+  // Tampilkan Section Preview
   document.getElementById('formSection').style.display = 'none';
   document.getElementById('previewSection').style.display = 'block';
   document.getElementById('previewActions').style.display = 'flex';
   document.getElementById('postDownloadMenu').style.display = 'none';
 });
 
-// Kembali ke Edit Form
 function editForm() {
   document.getElementById('formSection').style.display = 'block';
   document.getElementById('previewSection').style.display = 'none';
 }
 
-// Generate & Download PDF A4
-function downloadPDF() {
+// GENERATE PDF DENGAN PERBAIKAN RENDERING
+async function downloadPDF() {
   const docType = document.getElementById('docType').value;
   
-  // Format Nama File: jenis_yymmdd.pdf
   const now = new Date();
   const yy = String(now.getFullYear()).slice(-2);
   const mm = String(now.getMonth() + 1).padStart(2, '0');
@@ -205,23 +207,32 @@ function downloadPDF() {
   const fileName = `${docType}_${yy}${mm}${dd}.pdf`;
 
   const element = document.getElementById('pdfContainer');
-  
+
+  // Pastikan Font TTF Siap Terlebih Dahulu
+  if (document.fonts) {
+    await document.fonts.ready;
+  }
+
   const opt = {
-    margin:       0,
+    margin:       [10, 10, 10, 10],
     filename:     fileName,
     image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2, useCORS: true },
+    html2canvas:  { 
+      scale: 2, 
+      useCORS: true,
+      letterRendering: true,
+      scrollX: 0,
+      scrollY: 0
+    },
     jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
 
   html2pdf().set(opt).from(element).save().then(() => {
-    // Tampilkan Menu Lanjutan Setelah PDF Berhasil Didownload
     document.getElementById('previewActions').style.display = 'none';
     document.getElementById('postDownloadMenu').style.display = 'block';
   });
 }
 
-// Reset Formulir & Kembali ke Depan
 function resetForm() {
   document.getElementById('docForm').reset();
   toggleDocTypeFields();
