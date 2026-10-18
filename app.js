@@ -48,7 +48,8 @@ function formatTanggalAksara(dateString, transliterateFn) {
   const yearNum = d.getFullYear();
 
   const dayAksara = toAngkaJawa(dayNum);
-  const monthAksara = transliterateFn(monthName);
+  // Nama bulan dipastikan huruf kecil semua sebelum dikirim ke mesin transliterasi
+  const monthAksara = transliterateFn(monthName.toLowerCase());
   const yearAksara = toAngkaJawa(yearNum);
 
   return `${dayAksara} ${monthAksara} ${yearAksara}`;
@@ -108,15 +109,21 @@ document.getElementById('docForm').addEventListener('submit', async function(e) 
     return;
   }
 
-  let t = window.transliterasiKalimat;
+  let rawTranslitterateFn = window.transliterasiKalimat;
   if (scriptFile === 'tradisional.js' || scriptFile === 'carakawi.js') {
-    t = window.transliterateKawi || window.transliterasiKalimat;
+    rawTranslitterateFn = window.transliterateKawi || window.transliterasiKalimat;
   }
 
-  if (typeof t !== 'function') {
+  if (typeof rawTranslitterateFn !== 'function') {
     alert("Fungsi transliterasi tidak ditemukan pada paugeran terpilih.");
     return;
   }
+
+  // WRAPPER KHUSUS: Mengubah semua teks input menjadi HURUF KECIL SEMUA
+  const t = function(text) {
+    if (!text) return "";
+    return rawTranslitterateFn(String(text).toLowerCase());
+  };
 
   const pdfContainer = document.getElementById('pdfContainer');
   pdfContainer.className = `a4-page ${fontClass}`;
