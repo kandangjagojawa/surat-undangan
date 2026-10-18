@@ -315,7 +315,7 @@ body {
 }
 
 .pdf-header {
-  text-align: right;
+  text-align: left;
   margin-bottom: 25px;
 }
 
@@ -324,17 +324,17 @@ body {
 }
 
 .pdf-recipient .indented {
-  padding-left: 25px;
+  padding-left: 0;
 }
 
 .paragraph-text {
-  text-align: justify;
+  text-align: left;
   margin-bottom: 20px;
-  text-indent: 35px;
+  text-indent: 0;
 }
 
 .event-details {
-  margin: 20px 0 20px 35px;
+  margin: 20px 0;
 }
 
 .event-details table {
@@ -354,9 +354,9 @@ body {
 
 .pdf-footer {
   margin-top: 40px;
-  float: right;
-  text-align: center;
-  min-width: 220px;
+  float: none;
+  text-align: left;
+  min-width: auto;
 }
 
 .signature-space {
@@ -463,4 +463,4 @@ body {
     margin: 25mm 20mm 20mm 20mm;
   }
    }
-     
+   
