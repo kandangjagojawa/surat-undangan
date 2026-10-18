@@ -1,4 +1,3 @@
-/* Pengaturan Font Aksara Jawa */
 @font-face {
   font-family: 'Ngayogyann';
   src: url('ngayogyann.ttf') format('truetype');
@@ -113,36 +112,41 @@ button, .btn {
   margin-bottom: 10px;
 }
 
-/* FORMAT KERTAS DOKUMEN A4 & UKURAN FONT 14PT */
+/* FORMAT KERTAS DOKUMEN A4 DENGAN PENGATURAN AKSARA JAWA SPESIFIK */
 .a4-page {
   width: 210mm;
   min-height: 297mm;
-  padding: 25mm 20mm 20mm 20mm;
+  padding: 20mm 20mm 20mm 20mm;
   margin: 0 auto;
   background: white;
   border: 1px solid #dddddd;
   box-shadow: 0 0 8px rgba(0,0,0,0.1);
-  font-size: 14pt; /* Ukuran font sesuai permintaan */
-  line-height: 1.8;
+  font-size: 14pt;
+  line-height: 2.5; /* Mencegah Pasangan Bertumpuk */
   word-wrap: break-word;
+  
+  /* Aktifkan rendering ligatur OpenType Aksara Jawa */
+  font-feature-settings: "liga" 1, "calt" 1;
+  -webkit-font-feature-settings: "liga" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
 }
 
-/* Penerapan Font Aksara Jawa */
-.font-ngayogyann * {
-  font-family: 'Ngayogyann', sans-serif !important;
+/* Penerapan Kelas Font Aksara Jawa */
+.font-ngayogyann, .font-ngayogyann * {
+  font-family: 'Ngayogyann', serif !important;
 }
 
-.font-ngayogyan * {
-  font-family: 'Ngayogyan', sans-serif !important;
+.font-ngayogyan, .font-ngayogyan * {
+  font-family: 'Ngayogyan', serif !important;
 }
 
 .pdf-header {
   text-align: right;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .pdf-recipient {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .pdf-recipient .indented {
@@ -156,7 +160,7 @@ button, .btn {
 }
 
 .event-details {
-  margin: 20px 0 20px 30px;
+  margin: 15px 0 15px 30px;
 }
 
 .event-details table {
@@ -165,7 +169,7 @@ button, .btn {
 }
 
 .event-details td {
-  padding: 4px 8px;
+  padding: 2px 8px;
   vertical-align: top;
 }
 
@@ -175,7 +179,7 @@ button, .btn {
 }
 
 .pdf-footer {
-  margin-top: 40px;
+  margin-top: 30px;
   float: right;
   text-align: center;
   min-width: 200px;
