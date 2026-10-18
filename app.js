@@ -54,16 +54,13 @@ function formatTanggalAksara(dateString, transliterateFn) {
   return `${dayAksara} ${monthAksara} ${yearAksara}`;
 }
 
-// FUNGSI MEMUAT SCRIPT ENGINE SECARA DINAMIS (MENGHINDARI NATIVE OVERWRITE)
 function loadScriptEngine(scriptFile) {
   return new Promise((resolve, reject) => {
-    // Hapus script engine sebelumnya dari DOM
     const existingScript = document.getElementById('activeEngineScript');
     if (existingScript) {
       existingScript.remove();
     }
 
-    // Bersihkan fungsi global sebelum memuat yang baru
     delete window.transliterasiKalimat;
     delete window.transliterateKawi;
 
@@ -82,7 +79,6 @@ function getRandomText(array) {
   return array[idx];
 }
 
-// PROSES FORM SUBMIT
 document.getElementById('docForm').addEventListener('submit', async function(e) {
   e.preventDefault();
 
@@ -105,7 +101,6 @@ document.getElementById('docForm').addEventListener('submit', async function(e) 
     }
   }
 
-  // Muat script engine yang dipilih
   try {
     await loadScriptEngine(scriptFile);
   } catch (err) {
@@ -113,7 +108,6 @@ document.getElementById('docForm').addEventListener('submit', async function(e) 
     return;
   }
 
-  // Tentukan fungsi transliterasi berdasarkan paugeran yang baru dimuat
   let t = window.transliterasiKalimat;
   if (scriptFile === 'tradisional.js' || scriptFile === 'carakawi.js') {
     t = window.transliterateKawi || window.transliterasiKalimat;
@@ -124,7 +118,6 @@ document.getElementById('docForm').addEventListener('submit', async function(e) 
     return;
   }
 
-  // Set kelas font pada container preview
   const pdfContainer = document.getElementById('pdfContainer');
   pdfContainer.className = `a4-page ${fontClass}`;
 
@@ -196,41 +189,13 @@ function editForm() {
   document.getElementById('previewSection').style.display = 'none';
 }
 
-// GENERATE PDF DENGAN PERBAIKAN RENDERING
-async function downloadPDF() {
-  const docType = document.getElementById('docType').value;
-  
-  const now = new Date();
-  const yy = String(now.getFullYear()).slice(-2);
-  const mm = String(now.getMonth() + 1).padStart(2, '0');
-  const dd = String(now.getDate()).padStart(2, '0');
-  const fileName = `${docType}_${yy}${mm}${dd}.pdf`;
+function downloadPDF() {
+  window.print();
 
-  const element = document.getElementById('pdfContainer');
-
-  // Pastikan Font TTF Siap Terlebih Dahulu
-  if (document.fonts) {
-    await document.fonts.ready;
-  }
-
-  const opt = {
-    margin:       [10, 10, 10, 10],
-    filename:     fileName,
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { 
-      scale: 2, 
-      useCORS: true,
-      letterRendering: true,
-      scrollX: 0,
-      scrollY: 0
-    },
-    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  };
-
-  html2pdf().set(opt).from(element).save().then(() => {
+  setTimeout(() => {
     document.getElementById('previewActions').style.display = 'none';
     document.getElementById('postDownloadMenu').style.display = 'block';
-  });
+  }, 500);
 }
 
 function resetForm() {
