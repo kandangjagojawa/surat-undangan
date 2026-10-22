@@ -195,10 +195,16 @@ document.getElementById('docForm').addEventListener('submit', async function(e) 
     const tempatAcara = document.getElementById('inputTempatAcara').value;
     const namaAcara = document.getElementById('inputNamaAcara').value;
 
-    document.getElementById('lblHariTanggal').innerText = t("Hari, Tanggal");
-    document.getElementById('lblJam').innerText = t("Jam");
-    document.getElementById('lblTempat').innerText = t("Tempat");
-    document.getElementById('lblAcara').innerText = t("Acara");
+    // Pengaturan label rincian acara berdasarkan bahasa
+    const lblHariText = (docLang === 'indonesia') ? "Hari, Tanggal" : "dinten, tanggal";
+    const lblJamText = (docLang === 'indonesia') ? "Jam" : "tabuh";
+    const lblTempatText = (docLang === 'indonesia') ? "Tempat" : "panggén-an-ipun";
+    const lblAcaraText = (docLang === 'indonesia') ? "Acara" : "acara-nipun";
+
+    document.getElementById('lblHariTanggal').innerText = t(lblHariText);
+    document.getElementById('lblJam').innerText = t(lblJamText);
+    document.getElementById('lblTempat').innerText = t(lblTempatText);
+    document.getElementById('lblAcara').innerText = t(lblAcaraText);
 
     document.getElementById('previewHariTanggal').innerText = formatTanggalAksara(tglAcara, t);
     document.getElementById('previewJam').innerText = t(jamAcara);
@@ -248,5 +254,4 @@ function resetForm() {
   updateEngineOptions();
   document.getElementById('formSection').style.display = 'block';
   document.getElementById('previewSection').style.display = 'none';
-                                                    }
-    
+}
